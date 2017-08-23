@@ -1,7 +1,10 @@
 package me.farhan.controllers;
 
 import me.farhan.model.dto.UserDto;
+import me.farhan.responses.JwtAuthenticationResponse;
+import me.farhan.security.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mobile.device.Device;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,15 +30,21 @@ public class UserAuthenticationController {
   @Autowired
   private UserDetailsService userDetailsService;
 
+  @Autowired
+  private JwtTokenUtil jwtTokenUtil;
+
 
   @PostMapping("/token")
-  public Response<?> createAuthenticationToken(@RequestBody @Valid UserDto userDto, Device device) {
+  public ResponseEntity<?> createAuthenticationToken(@RequestBody @Valid UserDto userDto, Device device) {
 
     final Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(userDto.getEmail(), userDto.getPassword()));
-    SecurityContextHolder.getContext().setAuthentication(authentication);
-    final UserDetails userDetails = userDetailsService.loadUserByUsername(userDto.getEmail());
 
-    return null;
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+
+    final UserDetails userDetails = userDetailsService.loadUserByUsername(userDto.getEmail());
+    final String token = jwtTokenUtil.generateToken(userDetails, device);
+
+    return ResponseEntity.ok(new JwtAuthenticationResponse(token));
   }
 }
