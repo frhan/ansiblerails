@@ -27,17 +27,10 @@ APP
 
 *** https://github.com/altfatterz/dockerized-microservices 
 
-
-docker run -d \
-    --name demo-mysql \
-    -e MYSQL_ROOT_PASSWORD=p4SSW0rd \
-    -e MYSQL_DATABASE=demo \
-    -e MYSQL_USER=dbuser \
-    -e MYSQL_PASSWORD=dbp4ss \
-    mysql:latest
-    
-    
-
-
-docker run --name demo-mysql -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=spjwt -e MYSQL_USER=farhan -e MYSQL_PASSWORD=cefalo -p 3306:3306 -d mysql:5.6
-
+Tasks
+-----
+1. Run in docker
+2. Register and authenticate service should separate
+3. communicate with both services
+4. Service discovery pattern (server)
+5. 
